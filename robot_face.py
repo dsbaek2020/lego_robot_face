@@ -3,6 +3,7 @@ import board
 from adafruit_ht16k33.matrix import Matrix8x8
 from PIL import Image
 
+print("go....")
 print("boot robot face")
 
 i2c = board.I2C()
