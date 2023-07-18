@@ -1,7 +1,11 @@
 from buildhat import Motor
+
 import board
 from adafruit_ht16k33.matrix import Matrix8x8
 from PIL import Image
+
+from classifier import Classifier
+from time import sleep
 
 print("go....")
 print("boot robot face")
@@ -29,6 +33,12 @@ faces = {
     "sad":{"mouth":-45, "right_eye":look_down, "left_eye":look_down, "eyebrows":-40}
     }
 
+seen_items = Classifier(label_file="labels.txt",model_file="model.tflite",threshold=0.5)
+reactions = {"broccoli":"sad",
+             "teapot":"neutral",
+             "snake":"angry",
+             "hotdog":"happy"}
+
 mouth_r.run_to_position(0)
 mouth_l.run_to_position(0)
 eyebrows.run_to_position(0)
@@ -54,5 +64,18 @@ def move_eyebrows (position):
 def move_mouth (position, speed=100):
     mouth_l.run_to_position(position * -1, speed, blocking=False) #반대 방향으로(역방향) 회전
     mouth_r.run_to_position(position, speed, blocking=False) #진행 방향으로(순방향) 회전
-    
-    
+
+
+for face in faces:
+  set_face(faces[face])
+
+set_face(faces["neutral"])
+
+while True:
+    sleep(1)
+    if seen_items.item != seen_items.last_item:
+        item = seen_items.item
+        print('item=', item)
+        if item in reactions.keys():
+            set_face(faces[reactions[item]])
+    sleep(1)
