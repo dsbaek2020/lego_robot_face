@@ -29,19 +29,19 @@ eyebrows = Motor('C')
 #print("motor initialize ok.")
 
 faces = {
-    "neutral":{"mouth":0, "right_eye":neutral, "left_eye":neutral, "eyebrows":0},
-    "angry":{"mouth":45, "right_eye":wide, "left_eye":wide, "eyebrows":150},
-    "happy":{"mouth":-20, "right_eye":angry, "left_eye":angry, "eyebrows":-150},
-    "sad":{"mouth":-45, "right_eye":look_down, "left_eye":look_down, "eyebrows":-40}
+    "neutral":   {"mouth":0,   "right_eye":neutral,   "left_eye":neutral,   "eyebrows":0},
+    "angry":     {"mouth":45,  "right_eye":wide,      "left_eye":wide,      "eyebrows":150},
+    "happy":     {"mouth":-20, "right_eye":angry,     "left_eye":angry,     "eyebrows":-150},
+    "sad":       {"mouth":-45, "right_eye":look_down, "left_eye":look_down, "eyebrows":-40}
     }
 
 #seen_items = Classifier(label_file="labels.txt",model_file="model.tflite",threshold=0.5)
-seen_items = Classifier(label_file="labels.txt",model_file="model_edgetpu.tflite",threshold=0.5)
+seen_items = Classifier(label_file="labels.txt",model_file="new_jinhae_girls_h_model_edgetpu.tflite",threshold=0.8)
 
-reactions = {"game pad":"sad",
-             "remote controller":"neutral",
-             "lego":"angry",
-             "hotdog":"happy"}
+reactions = {"game_pad"            : "sad",
+             "remote_controller"   : "neutral",
+             "lego_bird"           : "angry",
+             "Cat"                 : "happy"}
 
 mouth_r.run_to_position(0)
 mouth_l.run_to_position(0)
@@ -79,7 +79,7 @@ while True:
     sleep(1)
     if seen_items.item != seen_items.last_item:
         item = seen_items.item
-        print('item=', item)
+        print('item=', item[0], 'probability=', round(item[1],2))
         if item in reactions.keys():
             set_face(faces[reactions[item]])
     sleep(1)

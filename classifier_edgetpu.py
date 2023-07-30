@@ -1,3 +1,15 @@
+#{home}/coral/pycoral/examples 에서 
+# imprinting_learning.py 파일 절차에 따라서 
+#  첫번째 학습을 시키고 최초의  모델 생성 
+
+# 그다음{home}/문서/teacher/image_training
+# 에서 retrain 과정을 실행한다. 
+# 참조: Image classification with google coral (code club project)
+
+# 생성된 edgetpu 모델파일과 라벨파일을 classifier_edgetup.py (이 파일)
+# 이 있는 폴더에 복사한다.  
+
+
 import re
 import os
 import cv2
@@ -10,7 +22,7 @@ import threading
 import time
 
 # the TFLite converted to be used with edgetpu
-modelPath = 'model_edgetpu.tflite'
+modelPath = 'new_jinhae_girls_h_model_edgetpu.tflite'
 
 # The path to labels.txt that was downloaded with your model
 labelPath = 'labels.txt'
@@ -77,12 +89,13 @@ class Classifier(object):
         if prob > self._threshold and label!=self._current_item:
             self._last_item_time = time.time()
             self._last_item = self._current_item
-            self._current_item = label
-            print(self._current_item,self._last_item)
+            self._current_item = label, prob
+            #print(self._current_item,self._last_item)
+
         elif prob <= self._threshold and self._current_item!=None and time.time()-self._last_item_time > 5: 
             self._last_item = self._current_item
             self._current_item = None 
-            print(self._current_item,self._last_item)
+            #print(self._current_item,self._last_item)
           
         cv2.imshow('frame', frame)
         #print(f'Label: {labels[results[0].id]}, Score: {results[0].score}')

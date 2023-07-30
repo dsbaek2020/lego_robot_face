@@ -1,3 +1,15 @@
-0 game pad
-1 remote controller
-2 lego
+0  Wine
+1  Lily
+2  Alarm_Clock
+3  Parrot
+4  Tin_Can
+5  Sea_Lion
+6  Telephone
+7  Cat
+8  Stairs
+9  Starfish
+10 lego_bird
+11 remote_controller
+12 logitech_lift_mouse
+13 iphone_se
+14 red_sign_pen

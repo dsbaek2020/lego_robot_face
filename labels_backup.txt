@@ -1,0 +1,3 @@
+0 game pad
+1 remote controller
+2 lego
