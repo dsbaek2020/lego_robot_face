@@ -4,14 +4,16 @@ import board
 from adafruit_ht16k33.matrix import Matrix8x8
 from PIL import Image
 
-from classifier import Classifier
+#from classifier import Classifier
+from classifier_edgetpu import Classifier
+
 from time import sleep
 
-print("go....")
-print("boot robot face")
+#print("go....")
+#print("boot robot face")
 
 i2c = board.I2C()
-#left_eye = Matrix8x8(i2c, address=0x71)
+left_eye = Matrix8x8(i2c, address=0x71)
 right_eye = Matrix8x8(i2c, address=0x70)
 
 
@@ -24,7 +26,7 @@ look_down = Image.open("look_down.png").rotate(90)
 mouth_r = Motor('A')
 mouth_l = Motor('B')
 eyebrows = Motor('C')
-print("motor initialize ok.")
+#print("motor initialize ok.")
 
 faces = {
     "neutral":{"mouth":0, "right_eye":neutral, "left_eye":neutral, "eyebrows":0},
@@ -33,10 +35,12 @@ faces = {
     "sad":{"mouth":-45, "right_eye":look_down, "left_eye":look_down, "eyebrows":-40}
     }
 
-seen_items = Classifier(label_file="labels.txt",model_file="model.tflite",threshold=0.5)
-reactions = {"broccoli":"sad",
-             "teapot":"neutral",
-             "snake":"angry",
+#seen_items = Classifier(label_file="labels.txt",model_file="model.tflite",threshold=0.5)
+seen_items = Classifier(label_file="labels.txt",model_file="model_edgetpu.tflite",threshold=0.5)
+
+reactions = {"game pad":"sad",
+             "remote controller":"neutral",
+             "lego":"angry",
              "hotdog":"happy"}
 
 mouth_r.run_to_position(0)
@@ -49,7 +53,7 @@ def set_face (face):
     move_eyebrows(face["eyebrows"])
 
 def change_eyes(left,right):
-    #left_eye.image(left)
+    left_eye.image(left)
     right_eye.image(right)
 
 def move_eyebrows (position):
@@ -59,7 +63,7 @@ def move_eyebrows (position):
     else:
         rotation = 'clockwise'
     eyebrows.run_to_position(position, direction = rotation)
-    
+
 
 def move_mouth (position, speed=100):
     mouth_l.run_to_position(position * -1, speed, blocking=False) #반대 방향으로(역방향) 회전
@@ -69,7 +73,7 @@ def move_mouth (position, speed=100):
 for face in faces:
   set_face(faces[face])
 
-set_face(faces["neutral"])
+set_face(faces["happy"])
 
 while True:
     sleep(1)
@@ -79,3 +83,4 @@ while True:
         if item in reactions.keys():
             set_face(faces[reactions[item]])
     sleep(1)
+

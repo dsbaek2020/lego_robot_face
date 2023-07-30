@@ -12,6 +12,8 @@ import numpy as np
 import picamera
 from signal import pause
 from PIL import Image
+
+#이코드는 pycoral 기반이 아니면 일반적인 tensorflow lite를 이용한 것임.
 from tflite_runtime.interpreter import Interpreter
 
 class Classifier(object):
@@ -109,7 +111,7 @@ class Classifier(object):
 
 
 if __name__ == '__main__':
-  classifier = Classifier(label_file="labels.txt",model_file="model.tflite",threshold=0.5)
+  classifier = Classifier(label_file="labels.txt",model_file="model_unquant.tflite",threshold=0.9)
   while True:
 #    print(classifier.object,classifier.last_object)
     time.sleep(0.1) 
